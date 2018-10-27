@@ -1,0 +1,20 @@
+Prefer const, enums and inlines to #define:
+
+
+#define ASPECT_RATION 1.65
+
+better way is const double ASPECT_RATIo = 1.63
+
+because constants is seen to compilers - defines not so it is easiest to recognize compile errors with constants instead of define.
+
+
+Pointers also better to be constants with data to:
+
+const char * const ch = "asdad";
+
+Or better use strings:
+
+const std::string ch = String("AAA");
+
+
+DEFINES use only for macroses (Хотя я бы поставил под сомнение вообще использование макросов)

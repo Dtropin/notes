@@ -1,0 +1,21 @@
+To class constants need to add static modifier:
+
+class A {
+
+public :
+static const int b = 5;
+
+}
+
+
+All fields in class declaration needed in definition except class constants but as long as i dont take it address:
+
+A a;
+
+&a.b;//Need a definition in cpp file:
+
+const int A::b;
+
+(Вообще я этого не понял, вроде и без этого нормально адрес берется, возможно речь идет о том, если брать адрес из внешнего класса
+
+You cannot init constants in class definition (it is possible only in declaration)

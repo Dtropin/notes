@@ -1,0 +1,49 @@
+
+Статические объекты это:
+global objects, objects defined at namespace scope,
+objects declared static inside classes, objects declared static inside
+functions, and objects declared static at file scope
+
+
+[3~ Static objects inside
+functions are known as local static objects (because they’re local to a
+function), and the other kinds of static objects are known as non-local
+static objects. Static objects are destroyed when the program exits,
+i.e., their destructors are called when main finishes executing
+
+actual problem is this: if initialization
+of a non-local static object in one translation unit uses a
+non-local static object in a different translation unit, the object it uses
+could be uninitialized, because the relative order of initialization of nonlocal
+static objects defined in different translation units is undefined. o
+
+
+
+!!!
+Again, the relative order of initialization of non-local static
+objects defined in different translation units is undefined
+!!!
+
+Т.е. если есть один статик объект который ссылается на другой статик объект, и эти два объекта в разных файлах, то порядок их иницализации не определен
+
+
+
+Fortunately, a small design change eliminates the problem entirely.
+All that has to be done is to move each non-local static object into its
+own function, where it’s declared static
+
+Clients then call the functions
+instead of referring to the objects. In other words, non-local static
+objects are replaced with local static objects
+
+Т.е вместо того чтобы выставлять наружу статик объект, мы выставляем наружу статик метод который отдает статик ссылку на объект
+(По сути синглтон получается):
+\
+
+
+FileSystem& tfs() // static method declared in FileSystem class:qw
+{
+static FileSystem fs; // define and initialize a local static object
+return fs; // return a reference to it
+}
+

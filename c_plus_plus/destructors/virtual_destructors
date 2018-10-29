@@ -1,0 +1,38 @@
+in polymorphic base classes need to declare virtual destructor
+
+Its because when a derived class object is deleted through a pointer
+to a base class with a non-virtual destructor, results are undefined (Скорее всего, если писать delete baseClass и у него нету виртуальнеаого деструктора (он не перегружен, есть только деструктор этого baseClass) то удалится только те данные
+которые относятся к родительскому классу:
+
+calss A {
+~A();
+}
+
+class B : A {
+virtual void b();
+}
+
+
+A a = B()
+delete a; // Удаляться только данные объявленные в A и то это не точно т.к. undefined behaviour
+
+Из этого следует, что не стоит наследоваться от классов у которых нет виртуального деструктора (например std::string)
+
+
+Если у класса есть виртуальный метод, то скорее всего это означает что он рассматривается как base класс и ему нуже виртуальный деструктор.
+
+
+
+Если же класс не будет base то ему не надо делать виртульнаый деструткор т.к. это увеличивает размер объекта, + связь с таблицей виртуальных функций и тд (тут лучше почитать и уточнить про эту тему)
+
+
+
+
+SUMMARY 
+
+
+Polymorphic base classes should declare virtual destructors. If a
+class has any virtual functions, it should have a virtual destructor.
+
+Classes not designed to be base classes or not designed to be used
+polymorphically should not declare virtual destructors.

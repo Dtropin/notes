@@ -1,0 +1,31 @@
+
+its all ok:
+
+int a = 5;
+const int h = a;
+int c = a;
+
+
+
+ТОЖЕ ОК:
+
+class A {
+
+const int i = 5;
+
+};
+
+
+A a;
+const A h = a;
+A c = a;
+
+
+А вот для ссылок уже надо так:
+
+const int j = 3; // j is declared const
+int* pj = const_cast<int*>(&j); (Без этого не заработает)
+
+Т.е. const_cast только для указателей и ссылок нужен выходит
+
+    

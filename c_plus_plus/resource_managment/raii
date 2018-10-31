@@ -1,0 +1,74 @@
+Предположим, есть фабрика возвращающая указатель на созданный объект
+
+A* fac();
+
+В комментарии написано, что тот кто вызвал метод ответственен за удаление, т.е.
+
+A* a = fac();
+
+
+
+
+delete a;
+
+
+
+Но это не безопасно т.к. по середине кода может быть некотловленный эксепшн или return.
+
+Тут приходят на помощь smart pointers:
+
+std::auto_ptr<A> ptr(fac());//RAII - в конструкторе ptr создаем объект
+
+Теперь код безопасен т.к. пойнтер будет удален при выходе из функции
+
+
+Смарт пойнтер - это resource managment object, идея использования объектов-менеджеров для управления жц ресурса называется RAII
+
+
+Resource-managing objects use their destructors to ensure that resources are released
+
+
+auto_ptr должен быть в единственном экземпляре на указатель иначе будет 2 делита!!
+
+Поэтому конструктор копирования  и операторы присваивания у auto_ptr обеспечивают уникальность смарт пойнтера
+
+ТАКЖЕ ВАЖНЫЙ МОМЕНТ - МЫ НЕ СОЗДАЕМ ПЕРЕМЕННУЮ УКАЗАТЕЛЯ КОТОРОЙ ПРИСВАИВАЕМ РЕЗУЛЬТАТ ФУНКЦИИ, а сразу вызываем функцию и передаем в параметр ptr:
+(Это надо для того, чтобы исключить возможность создания 2 смарт пойнтеров, защита от дурака)
+
+ВМЕСТО:
+
+A* a = fac();
+auto_ptr(a);
+
+
+НАДО:
+
+auto_ptr(fac());
+
+
+
+Есть альтернатива auto_ptr - reference_counting_smart_pointer
+
+An RCSP is a smart pointer that keeps track of how many objects point to a particular resource and automatically deletes the resource when nobody is pointing to it any longer
+
+Пример
+
+std::tr1::shared_ptr<Investment> pInv(createInvestment());
+
+Работает почти как garbage_collector, но не умеет break cycle references
+
+ВАЖНЫЙ МОМЕНТ - смарт пойнтеры используют delete поэтому кидать их на массивы - плохая идея (для массивов надо delete[])
+
+
+
+Things to Remember
+✦ To prevent resource leaks, use RAII objects that acquire resources
+in their constructors and release them in their destructors.
+
+✦ Two commonly useful RAII classes are tr1::shared_ptr and auto_ptr.
+tr1::shared_ptr is usually the better choice, because its behavior when
+copied is intuitive. Copying an auto_ptr sets it to null.
+
+
+:
+

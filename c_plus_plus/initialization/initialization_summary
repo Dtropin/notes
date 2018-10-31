@@ -7,3 +7,11 @@ the initialization list in the same order they’re declared in the class.
 
 ✦ Avoid initialization order problems across translation units by replacing
 non-local static objects with local static objects.
+
+
+✦ Make sure operator= is well-behaved when an object is assigned to
+itself. Techniques include comparing addresses of source and target
+objects, careful statement ordering, and copy-and-swap.
+
+✦ Make sure that any function operating on more than one object behaves
+correctly if two or more of the objects are the same.

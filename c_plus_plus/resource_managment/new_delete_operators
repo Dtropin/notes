@@ -1,0 +1,28 @@
+✦ If you use [] in a new expression, you must use [] in the corresponding
+delete expression. If you don’t use [] in a new expression, you
+mustn’t use [] in the corresponding delete expression.
+
+
+Если сденлать new int[100]
+
+а потом просто delete то будет undefined behaviour, максимум, удаляться 99 объектов из 100
+
+Почему так происходит:
+
+Когда делаем new - происходит две вещи, аллоцируется память и вызывается конструктор
+
+КОгда delete - вызывается деструктор и освобождается память
+
+Объекты и массивы хранятся немного по разному, массивы в отличие от объектов в самом начале хранят размер массива (но это очень упрощенно):
+
+
+Single Object:
+
+Object
+
+Array:
+
+N|Object1|Object2|object3|....
+
+
+Соответственно когда вызываем delete[] - он сможет считать размер этого массива и вызвать нужное число деструктуров

@@ -70,5 +70,23 @@ tr1::shared_ptr is usually the better choice, because its behavior when
 copied is intuitive. Copying an auto_ptr sets it to null.
 
 
-:
+Есть еще важная особенность использования смарт пойнтеров. Предположим, такой код:
+
+****КСтати, передавать смартпойнтер как параметр к функции идея не плохая, тем самым будешь удтверждать, что объект будет удален в твоем методе *****
+
+void processWidget(std::tr1::shared_ptr<Widget> pw, int priority);
+
+Затем вызываем его processWidget(shared_ptr(new WIdget), arg1()); - Такой вызов может привести к memory leak, и вот почему:
+
+Компилятор может менять порядок вызова конструктора и может получиться так:
+
+1. Execute “new Widget”.
+2. arg1.
+3. Call the tr1::shared_ptr constructor
+
+Тут может быть ситуация, что во время arg1 вылетет exception, тогда будет memory leak т.к. new Widget уже был создан, но еще не передан в shared_ptr.
+ЧТобы этого не было, надо делать передачу в shared_ptr отдельным выражением:
+
+std::tr1::shared_ptr<Widget> pw(new Widget);
+processWidget(pw, arg1());
 

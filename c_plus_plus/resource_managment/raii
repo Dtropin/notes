@@ -90,3 +90,6 @@ void processWidget(std::tr1::shared_ptr<Widget> pw, int priority);
 std::tr1::shared_ptr<Widget> pw(new Widget);
 processWidget(pw, arg1());
 
+
+в shared_ptr  модно передать не только указатель, но и еще функцию deleter, которая по сути будет решать как удалять объект когда счетчик ссылок достигнет нуля)
+
